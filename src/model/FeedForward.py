@@ -3,13 +3,13 @@ import torch.nn as nn
 
 class MLP(nn.Module):
 
-    def __init__(self,config):
+    def __init__(self,n_embd:int,dropout:float):
 
         super().__init__()
-        self.fc1 = nn.Linear(config.n_dim, 4 * config.n_dim,bias = False)
+        self.fc1 = nn.Linear(n_embd, 4 * n_embd,bias = False)
         self.gelu = nn.GELU(approximate = 'tanh')
-        self.fc2 = nn.Linear(4 * config.n_dim, config.n_dim,bias =False)
-        self.dropout = nn.Dropout(config.dropout)
+        self.fc2 = nn.Linear(4 * n_embd, n_embd,bias =False)
+        self.dropout = nn.Dropout(dropout)
 
     def forward(self, x:torch.Tensor):
 
