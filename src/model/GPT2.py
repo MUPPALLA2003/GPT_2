@@ -1,8 +1,8 @@
 import torch
 import torch.nn as nn
-from Embeddings import Embeddings
-from GPTBlock import GPTBlock
-from LayerNorm import LayerNormalization
+from .Embeddings import Embeddings
+from .GPTBlock import GPTBlock
+from .LayerNorm import LayerNormalization
 from typing import Optional
 import torch.nn.functional as F
 class GPT2(nn.Module):

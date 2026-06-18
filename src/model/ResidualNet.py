@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from LayerNorm import LayerNormalization
+from .LayerNorm import LayerNormalization
 
 class ResidualNetwork(nn.Module):
 

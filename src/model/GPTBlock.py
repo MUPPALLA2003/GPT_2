@@ -1,8 +1,8 @@
 import torch
 import torch.nn as nn
-from ResidualNet import ResidualNetwork
-from Attention import CausalSelfAttention
-from FeedForward import MLP
+from .ResidualNet import ResidualNetwork
+from .Attention import CausalSelfAttention
+from .FeedForward import MLP
 
 class GPTBlock(nn.Module):
 
@@ -17,7 +17,7 @@ class GPTBlock(nn.Module):
 
         def forward(self, x:torch.Tensor):
 
-            x = self.residual_attention(x,self.attention)
+            x = self.residual_attention(x,lambda X:self.attention(x))
             x = self.residual_mlp(x,self.mlp)
 
             return x
