@@ -16,17 +16,23 @@ class GPT2(nn.Module):
         self.layernorm = LayerNormalization(n_embd)
         self.projection_layer = nn.Linear(n_embd,vocab_size,bias = False)
         self._init_weights()
-        self.projection_layer.weight = self.embeddings.embedding.weight
+        self.embeddings.embedding.weight = self.projection_layer.weight
 
 
     def _init_weights(self):
     
         for module in self.modules():
+
             if isinstance(module, nn.Linear):
+
                 nn.init.normal_(module.weight, mean=0.0, std=0.02)
+
                 if module.bias is not None:
+
                     nn.init.zeros_(module.bias)
+
             elif isinstance(module, nn.Embedding):
+
                 nn.init.normal_(module.weight, mean=0.0, std=0.02)    
 
     def forward(self,x:torch.Tensor,targets:Optional[torch.Tensor] = None):
@@ -34,6 +40,7 @@ class GPT2(nn.Module):
         x = self.embeddings(x)
         
         for block in self.block:
+
             x = block(x)
 
         x = self.layernorm(x)
@@ -46,7 +53,29 @@ class GPT2(nn.Module):
 
         return logits, loss
 
-  
+    
+    @torch.no_grad()
+    def generate(self,idx:torch.Tensor,max_new_tokens:int,temperature:float = 1.0,top_k: Optional[int] = None):
+
+        self.eval()
+
+        for _ in range(max_new_tokens):
+           
+            idx_cond = idx if idx.size(1) <= self.seq_length else idx[:, -self.seq_length:]
+
+            logits, _ = self(idx_cond)           
+            logits = logits[:, -1, :] / temperature  
+
+            if top_k is not None:
+
+                v, _ = torch.topk(logits, min(top_k, logits.size(-1)))
+                logits[logits < v[:, [-1]]] = -float('inf')
+
+            probs = F.softmax(logits, dim=-1)
+            idx_next = torch.multinomial(probs, num_samples=1) 
+            idx = torch.cat((idx, idx_next), dim=1)
+
+        return idx
 
 
 
