@@ -77,6 +77,13 @@ class GPT2(nn.Module):
 
         return idx
 
+if __name__ == "__main__":
+
+    tokens = torch.randint(0,500,64)
+    model = GPT2(16,100,0.1,2,3,1000)
+    output,loss = model(tokens)
+    print(output)
+
 
 
         

@@ -17,7 +17,7 @@ class GPTBlock(nn.Module):
 
         def forward(self, x:torch.Tensor):
 
-            x = self.residual_attention(x,lambda X:self.attention(x))
+            x = self.residual_attention(x,self.attention)
             x = self.residual_mlp(x,self.mlp)
 
             return x
