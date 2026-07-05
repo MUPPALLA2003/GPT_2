@@ -84,6 +84,3 @@ if __name__ == "__main__":
     output,loss = model(tokens)
     print(output)
 
-
-
-        
