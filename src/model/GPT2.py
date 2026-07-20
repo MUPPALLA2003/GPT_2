@@ -18,7 +18,6 @@ class GPT2(nn.Module):
         self._init_weights()
         self.embeddings.embedding.weight = self.projection_layer.weight
 
-
     def _init_weights(self):
     
         for module in self.modules():
